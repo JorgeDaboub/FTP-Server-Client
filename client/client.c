@@ -1,3 +1,4 @@
+
 /*FTP Client*/
  
 #include <sys/socket.h>
@@ -138,4 +139,3 @@ int main(int argc,char *argv[])
 	    printf("Server failed to close connection\n");
 	}
     }
-}
