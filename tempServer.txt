@@ -1,0 +1,10 @@
+bin
+client
+LargeFile.mp4
+lib
+makefile
+MediumFile.pdf
+README.md
+server
+SmallFile.txt
+tempServer.txt

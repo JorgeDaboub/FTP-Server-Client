@@ -1,2 +1,9 @@
-server.o
-tempServer.txt
+total 43812
+drwxrws--- 2 jdaboub fa20-cse-30264.01      148 Sep 27 21:51 .
+drwxrws--- 4 jdaboub fa20-cse-30264.01       72 Sep 27 19:27 ..
+-rw-rw---- 1 jdaboub fa20-cse-30264.01 44033979 Sep 27 18:37 LargeFile.mp4
+-rw-rw---- 1 jdaboub fa20-cse-30264.01   780175 Sep 27 18:37 MediumFile.pdf
+-rwx------ 1 jdaboub fa20-cse-30264.01    14112 Sep 27 21:51 server.o
+-rw-rw---- 1 jdaboub fa20-cse-30264.01    26048 Sep 27 18:38 SmallFile.txt
+-rw-rw---- 1 jdaboub fa20-cse-30264.01        0 Sep 27 21:52 tempServer.txt
+-rw-rw---- 1 jdaboub fa20-cse-30264.01        0 Sep 27 19:42 test

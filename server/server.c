@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 {
 	struct sockaddr_in sin, client_addr;
 	char buf[BUFSIZ];
+	char tmp[BUFSIZ];
 	int addr_len;
 	int s, new_s, line_c;
 	FILE *fd;
@@ -85,15 +86,19 @@ int main(int argc, char *argv[])
 
 	addr_len = sizeof(client_addr);
 	i = 1;
+	new_s = accept(s, (struct sockaddr *)&client_addr, &addr_len);
+
+	printf("Connected to Client.\n", SERVER_PORT);
+
+
 	while (1)
 	{
-		new_s = accept(s, (struct sockaddr *)&client_addr, &addr_len);
-
 		recv(new_s, buf, 100, 0);
 		sscanf(buf, "%s", command);
+
 		if (!strcmp(command, "ls"))
 		{
-			system("ls > tempServer.txt");
+			system("ls -la > tempServer.txt");
 			i = 0;
 			stat("tempServer.txt", &obj);
 			size = obj.st_size;
@@ -154,17 +159,52 @@ int main(int argc, char *argv[])
 			close(filehandle);
 			send(new_s, &c, sizeof(int), 0);
 		}
-		else if (!strcmp(command, "pwd"))
+		
+		else if (!strcmp(command, "rm"))
 		{
-			system("pwd> tempServer.txt");
-			i = 0;
-			FILE *f = fopen("tempServer.txt", "r");
-			while (!feof(f))
-				buf[i++] = fgetc(f);
-			buf[i - 1] = '\0';
-			fclose(f);
-			send(new_s, buf, 100, 0);
+			// If file exists
+			if (access( buf + 3, F_OK ) != -1)
+			{
+				sscanf(buf + 3, "%s", tmp);
+				
+				// c = 1;
+				// send(new_s, &c, sizeof(int), 0);
+
+				// sscanf(buf, "%s", command);
+				// if(strcmp(command, "yes"))
+				// {
+					if( remove(tmp) == 0)
+						c = 1;
+					else
+						c = -1;
+				// }
+			}
+			else
+			{
+				c = -2;
+			}	
+			send(new_s, &c, sizeof(int), 0);
 		}
+
+		else if (!strcmp(command, "mkdir"))
+		{
+			if (mkdir(buf + 6,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ) == 0)
+				c = 1;
+			else
+				c = 0;
+			send(new_s, &c, sizeof(int), 0);
+		}
+
+		else if (!strcmp(command, "rmdir"))
+		{
+			
+			if (rmdir(buf + 6) == 0)
+				c = 1;
+			else
+				c = 0;
+			send(new_s, &c, sizeof(int), 0);
+		}
+
 		else if (!strcmp(command, "cd"))
 		{
 			if (chdir(buf + 3) == 0)
@@ -179,6 +219,8 @@ int main(int argc, char *argv[])
 			printf("FTP server quitting..\n");
 			i = 1;
 			send(new_s, &i, sizeof(int), 0);
+			close(new_s);
+			close(s);
 			exit(0);
 		}
 	}
